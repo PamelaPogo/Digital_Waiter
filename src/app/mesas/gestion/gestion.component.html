@@ -1,0 +1,243 @@
+<div class="header-section">
+  <div class="header-content">
+    <div class="title-section">
+      <h1><i class="fas fa-utensils"></i> Nueva Orden</h1>
+      <p class="subtitle">Crea y gestiona pedidos de mesa</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="_cancelarOrden()">
+        <i class="fas fa-arrow-left"></i> Cancelar
+      </button>
+      <button class="btn btn-primary" (click)="_mostrarModal = true" [disabled]="_totalFactura === 0">
+        <i class="fas fa-paper-plane"></i> Enviar Orden
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!-- Información de la orden -->
+  <div class="order-info-section">
+    <div class="info-card">
+      <h3><i class="icon-info"></i> Información de la Orden</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="numeroMesa">Número de Mesa *</label>
+          <input 
+            id="numeroMesa"
+            type="number" 
+            [(ngModel)]="_numeroMesa"
+            placeholder="Ej: 15"
+            class="form-control"
+            [class.error]="_validationErrors.numeroMesa">
+          <span class="error-message" *ngIf="_validationErrors.numeroMesa">
+            {{ _validationErrors.numeroMesa }}
+          </span>
+        </div>
+        
+        <div class="form-group">
+          <label for="nombreCliente">Nombre del Cliente *</label>
+          <input 
+            id="nombreCliente"
+            type="text" 
+            [(ngModel)]="_nombreCliente"
+            placeholder="Nombre completo"
+            class="form-control"
+            [class.error]="_validationErrors.nombreCliente">
+          <span class="error-message" *ngIf="_validationErrors.nombreCliente">
+            {{ _validationErrors.nombreCliente }}
+          </span>
+        </div>
+        
+        <div class="form-group">
+          <label for="numeroOrden">Número de Orden *</label>
+          <input 
+            id="numeroOrden"
+            type="text" 
+            [(ngModel)]="_numeroOrden"
+            placeholder="Se genera automáticamente"
+            class="form-control"
+            readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección principal de contenido -->
+  <div class="main-content">
+    <!-- Panel de selección de productos -->
+    <div class="products-panel">
+      <div class="panel-header">
+        <h3><i class="icon-menu"></i> Menú Disponible</h3>
+        <div class="category-tabs">
+          <button 
+            class="tab-btn"
+            [class.active]="_categoriaActiva === 'postres'"
+            (click)="_categoriaActiva = 'postres'">
+            <i class="icon-cake"></i> Postres
+          </button>
+          <button 
+            class="tab-btn"
+            [class.active]="_categoriaActiva === 'entradas'"
+            (click)="_categoriaActiva = 'entradas'">
+            <i class="icon-food"></i> Entradas
+          </button>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        <div 
+          class="product-card"
+          *ngFor="let product of _getProductosPorCategoria()"
+          [class.selected]="_cantidades[product.id] > 0">
+          
+          <div class="product-info">
+            <h4>{{ product.name }}</h4>
+            <p class="description">{{ product.description }}</p>
+            <span class="price">${{ product.price }}</span>
+          </div>
+          
+          <div class="quantity-controls">
+            <button 
+              class="qty-btn minus" 
+              (click)="_decrementarCantidad(product.id)"
+              [disabled]="(_cantidades[product.id] || 0) === 0">
+              <i class="icon-minus"></i>
+            </button>
+            <input 
+              type="number" 
+              [(ngModel)]="_cantidades[product.id]" 
+              (input)="_calcularTotal()" 
+              min="0" 
+              max="99"
+              class="qty-input">
+            <button 
+              class="qty-btn plus" 
+              (click)="_incrementarCantidad(product.id)">
+              <i class="icon-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel del pedido actual -->
+    <div class="order-panel">
+      <div class="panel-header">
+        <h3><i class="icon-shopping-cart"></i> Pedido Actual</h3>
+        <button 
+          class="btn btn-ghost btn-sm" 
+          (click)="_limpiarPedido()"
+          *ngIf="_totalFactura > 0">
+          <i class="icon-trash"></i> Limpiar
+        </button>
+      </div>
+      
+
+      <div class="order-summary" *ngIf="_totalFactura > 0; else emptyOrder">
+        <div class="order-items">
+          <div 
+            class="order-item"
+            *ngFor="let product of _pedido"
+            [hidden]="(_cantidades[product.id] || 0) === 0">
+            
+            <div class="item-info">
+              <span class="item-name">{{ product.name }}</span>
+              <span class="item-price">${{ product.price }} c/u</span>
+            </div>
+            <div class="item-quantity">
+              <span class="quantity">x{{ _cantidades[product.id] }}</span>
+              <span class="subtotal">${{ (_cantidades[product.id] * parseFloat(product.price)).toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-total">
+          <div class="total-line">
+            <span>Subtotal:</span>
+            <span>${{ _totalFactura.toFixed(2) }}</span>
+          </div>
+          <div class="total-line tax">
+            <span>IVA (12%):</span>
+            <span>${{ (_totalFactura * 0.12).toFixed(2) }}</span>
+          </div>
+          <div class="total-line final">
+            <span>Total:</span>
+            <span>${{ (_totalFactura * 1.12).toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #emptyOrder>
+        <div class="empty-order">
+          <i class="icon-shopping-cart-empty"></i>
+          <p>No hay productos seleccionados</p>
+          <small>Selecciona productos del menú para comenzar</small>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+
+<!-- Modal de confirmación mejorado -->
+<div class="modal-overlay" *ngIf="_mostrarModal" (click)="_closeModal($event)">
+  <div class="modal-content enhanced">
+    <div class="modal-header">
+      <h2><i class="icon-check-circle"></i> Confirmar Orden</h2>
+      <button class="modal-close" (click)="_mostrarModal = false">
+        <i class="icon-x"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="confirmation-info">
+        <div class="info-row">
+          <span class="label">Mesa:</span>
+          <span class="value">{{ _numeroMesa }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Cliente:</span>
+          <span class="value">{{ _nombreCliente }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Orden:</span>
+          <span class="value">{{ _numeroOrden }}</span>
+        </div>
+      </div>
+
+      <div class="order-summary-modal">
+        <h4>Resumen del Pedido:</h4>
+        <div class="items-list">
+          <div 
+            class="summary-item"
+            *ngFor="let product of _pedido"
+            [hidden]="(_cantidades[product.id] || 0) === 0">
+            <span>{{ product.name }} x{{ _cantidades[product.id] }}</span>
+            <span>${{ (_cantidades[product.id] * parseFloat(product.price)).toFixed(2) }}</span>
+          </div>
+        </div>
+        <div class="total-summary">
+          <div class="summary-line">Subtotal: ${{ _totalFactura.toFixed(2) }}</div>
+          <div class="summary-line">IVA (12%): ${{ (_totalFactura * 0.12).toFixed(2) }}</div>
+          <div class="summary-line total">Total: ${{ (_totalFactura * 1.12).toFixed(2) }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="_mostrarModal = false">
+        <i class="icon-x"></i> Cancelar
+      </button>
+      <button class="btn btn-success" (click)="_enviarOrden()">
+        <i class="icon-check"></i> Confirmar Orden
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" *ngIf="_enviandoOrden">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <p>Enviando orden...</p>
+  </div>
+</div>

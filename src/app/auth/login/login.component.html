@@ -1,0 +1,69 @@
+<div id="app" class="app">
+    <!-- BEGIN login -->
+    <div class="login login-with-news-feed">
+      <!-- BEGIN news-feed -->
+      <div class="news-feed">
+        <div class="news-image" style="background-image: url(../../../assets/img/theme/register.jpg)"></div>
+        <div class="news-caption">
+          <h4 class="caption-title"><b>Digital</b>Waiter</h4>
+          
+        </div>
+      </div>
+      <!-- END news-feed -->
+      
+      <!-- BEGIN login-container -->
+      <div class="login-container">
+        <!-- BEGIN login-header -->
+        <div class="login-header mb-30px">
+          <div class="brand">
+            <div class="d-flex align-items-center">
+              <span class="logo">
+                
+              </span>
+              <b>Digital</b> Waiter
+            </div>
+            <small>Lleva tu Restaurant al siguiente nivel</small>
+          </div>
+          <div class="icon">
+            <i class="fa fa-sign-in-alt"></i>
+          </div>
+        </div>
+        <!-- END login-header -->
+        
+        <!-- BEGIN login-content -->
+        <div class="login-content">
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="fs-13px">
+            <div class="form-floating mb-15px">
+              <input type="email" class="form-control h-45px fs-13px" placeholder="Email Address" [(ngModel)]="loginData.email" name="email" id="emailAddress" required />
+              <label for="emailAddress" class="d-flex align-items-center fs-13px text-gray-600">Email </label>
+            </div>
+            <div class="form-floating mb-15px">
+              <input type="password" class="form-control h-45px fs-13px" placeholder="Password" [(ngModel)]="loginData.password" name="password" id="password" required />
+              <label for="password" class="d-flex align-items-center fs-13px text-gray-600">Contraseña</label>
+            </div>
+            <div class="form-check mb-30px">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="loginData.rememberMe" name="rememberMe" id="rememberMe" />
+              <label class="form-check-label" for="rememberMe">
+                Recuerdame
+              </label>
+            </div>
+            <div class="mb-15px">
+              <button type="submit" class="btn btn-theme d-block h-45px w-100 btn-lg fs-14px">Sign me in</button>
+            </div>
+            <div class="mb-40px pb-40px text-dark">
+              Aún no eres miembro?<a href="/register" class="text-primary">Registrate</a> Aquí.
+            </div>
+            <hr class="bg-gray-600 opacity-2" />
+            <div class="text-gray-600 text-center mb-0">
+              &copy; Digital Waiter All Right Reserved 2025
+            </div>
+          </form>
+        </div>
+        <!-- END login-content -->
+      </div>
+      <!-- END login-container -->
+    </div>
+    <!-- END login -->
+  </div>
+  <!-- END #app -->
+  

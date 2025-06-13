@@ -1,0 +1,171 @@
+<!-- begin breadcrumb -->
+<ol class="breadcrumb float-xl-end">
+  <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
+ 
+</ol>
+<!-- end breadcrumb -->
+<!-- begin page-header -->
+<h1 class="page-header"> Bienvenido</h1>
+<!-- end page-header -->
+
+<div class="container-home">
+  <div class="title">
+    <h1>Menu</h1>
+  </div>
+
+  <!-- Card de cartass -->
+  <div class="container">
+    <div class="card" *ngFor="let carta of cartas; let i = index" (mouseenter)="onMouseEnter(i)" (mouseleave)="onMouseLeave(i)">
+      <div class="imgPerson">
+        <div class="card-img-top" id="card-img-{{i}}" [ngStyle]="{'background-image': 'url(' + carta.profileImage + ')'}"></div>
+        <div class="card-body">
+          <h2 class="card-title">{{ carta.day }}</h2>
+          <p class="card-text">{{ carta.description }}</p>
+          <div class="botones">
+            <button class="btn btn-primary" (click)="openViewModal(carta)">
+              Ver
+            </button>
+            <button class="btn btn-primary" (click)="openModal(carta)">
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<!-- Modal para el Menú del Día -->
+
+    <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true" #viewModal>
+     
+        <div class="modal-content modal-dialog" *ngIf="selectedCarta">
+          <div class="modal-header">
+            <h2 class="modal-title" id="menuModalLabel">Menú del Día - {{ selectedCarta.day }}</h2>
+            <p class="card-text">{{ selectedCarta.description }}</p>
+            <h3>Precio:</h3>
+            <h3 class="card-text">{{ selectedCarta.precio }}</h3>
+            <div class="d-flex justify-content-between">
+            <div>Estado: <span>{{ selectedCarta.estado }}</span></div>
+              
+            </div>
+  
+          </div>
+          <div class="modal-body">
+            <!-- Sopas -->
+            <div class="section">
+              <h6>Sopas</h6>
+              <div class="d-flex justify-content-between">
+                <div>Opción 1: <span>{{ selectedCarta.sopa }}</span></div>
+                
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <div>Opción 2: <span>{{ selectedCarta.sopa2 }}</span></div>
+                
+              </div>
+            </div>
+            <hr>
+            <!-- Plato Fuerte -->
+            <div class="section">
+              <h6>Plato Fuerte</h6>
+              <div class="d-flex justify-content-between">
+                <div>Opción : <span>{{ selectedCarta.platoFuerte }}</span></div>
+                
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <div>Opción 2: <span>{{ selectedCarta.platoFuerte2 }}</span></div>
+                
+              </div>
+            </div>
+            <hr>
+            <!-- Jugos -->
+            <div class="section">
+              <h6>Jugos</h6>
+              <div class="d-flex justify-content-between">
+                <div>Opción 1: <span>{{ selectedCarta.jugo }}</span></div>
+                
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <div>Opción 2: <span>{{ selectedCarta.jugo2 }}</span></div>
+                
+              </div>
+            </div>
+            <hr>
+            <!-- Postres -->
+            <div class="section">
+              <h6>Postres</h6>
+              <div class="d-flex justify-content-between">
+                <div>Opción 1: <span>{{ selectedCarta.postre }}</span></div>
+                
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <div>Opción 2: <span>{{ selectedCarta.postre2 }}</span></div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      
+    </div>
+
+  <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true" #editModal>
+  <div class="modal-content modal-dialog" *ngIf="selectedCarta">
+    <div class="modal-header">
+      <h2 class="modal-title" id="menuModalLabel">Menú del Día - 
+        <input type="text" [(ngModel)]="selectedCarta.day" class="form-control">
+      </h2>
+      <textarea [(ngModel)]="selectedCarta.description" class="form-control"></textarea>
+      <h3>Precio:</h3>
+      <input type="number" [(ngModel)]="selectedCarta.precio" class="form-control">
+      <div class="d-flex justify-content-between">
+        <div>Estado: 
+          <select [(ngModel)]="selectedCarta.estado" class="form-control">
+            <option value="Activo">En existencia</option>
+            <option value="Inactivo">Agotado</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <!-- Sopas -->
+      <div class="section">
+        <h6>Sopas</h6>
+        <input type="text" [(ngModel)]="selectedCarta.sopa" class="form-control">
+        <input type="text" [(ngModel)]="selectedCarta.sopa2" class="form-control mt-2">
+      </div>
+      <hr>
+
+      <!-- Plato Fuerte -->
+      <div class="section">
+        <h6>Plato Fuerte</h6>
+        <input type="text" [(ngModel)]="selectedCarta.platoFuerte" class="form-control">
+        <input type="text" [(ngModel)]="selectedCarta.platoFuerte2" class="form-control mt-2">
+      </div>
+      <hr>
+
+      <!-- Jugos -->
+      <div class="section">
+        <h6>Jugos</h6>
+        <input type="text" [(ngModel)]="selectedCarta.jugo" class="form-control">
+        <input type="text" [(ngModel)]="selectedCarta.jugo2" class="form-control mt-2">
+      </div>
+      <hr>
+
+      <!-- Postres -->
+      <div class="section">
+        <h6>Postres</h6>
+        <input type="text" [(ngModel)]="selectedCarta.postre" class="form-control">
+        <input type="text" [(ngModel)]="selectedCarta.postre2" class="form-control mt-2">
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      <button type="button" class="btn btn-primary" (click)="guardarCambios()">Guardar cambios</button>
+    </div>
+  </div>
+</div>

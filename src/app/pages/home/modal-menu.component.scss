@@ -1,0 +1,108 @@
+/* Estilo del modal */
+.modal-content {
+  background-color: rgb(248, 213, 186);
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  width: 100%;
+  max-width: 800px; 
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 3%;
+  margin-bottom: 3%;
+  
+}
+
+.modal-header {
+  
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(237, 233, 211);
+  gap: 30px;
+
+
+  
+}
+.modal-header h2 {
+  
+  font-size: 1.3rem;
+  
+  margin-left: 20px;
+  
+}
+
+.modal-body {
+  margin-top: 50px;
+}
+
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+h6 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.d-flex {
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+hr {
+  margin: 10px 0;
+  border-top: 1px solid #ccc;
+}
+
+
+
+button:hover {
+  opacity: 0.8;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: rgb(237, 233, 211);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Estilo de los botones */
+.btn-outline-primary {
+  border-color: rgb(33, 150, 243);
+  color: rgb(33, 150, 243);
+}
+
+.btn-outline-primary:hover {
+  background-color: rgb(33, 150, 243);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+  }
+
+  button {
+    width: 100%;
+  }
+}

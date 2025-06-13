@@ -1,0 +1,199 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <i class="fas fa-clipboard-list"></i>
+      Gestión de Órdenes
+    </h1>
+    <div class="header-actions">
+      <select class="filter-select" [(ngModel)]="selectedFilter" (change)="filterOrders()">
+        <option value="">Todos los estados</option>
+        <option value="ENVIADO A COCINA">Enviado a Cocina</option>
+        <option value="LISTO PARA DESPACHO">Listo para Despacho</option>
+        <option value="ENTREGADO">Entregado</option>
+      </select>
+      <button class="refresh-btn" (click)="refreshOrders()" [disabled]="isLoading">
+        <div *ngIf="isLoading" class="loading"></div>
+        <i *ngIf="!isLoading" class="fas fa-sync-alt"></i>
+        {{ isLoading ? 'Actualizando...' : 'Actualizar' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Orders Grid -->
+  <div class="orders-grid" *ngIf="hasFilteredOrders()">
+    <div *ngFor="let order of filteredOrders" class="order-card">
+      <div class="order-header">
+        <div class="order-id">{{ order.id }}</div>
+        <div class="status-badge" [ngClass]="getStatusClass(order.status)">
+          <i [ngClass]="getStatusIcon(order.status)"></i>
+          {{ order.status }}
+        </div>
+      </div>
+      <div class="order-info">
+        <div class="info-row">
+          <div class="info-label">
+            <i class="fas fa-chair"></i>
+            Mesa:
+          </div>
+          <div class="info-value">{{ order.table }}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">
+            <i class="fas fa-user"></i>
+            Cliente:
+          </div>
+          <div class="info-value">{{ order.client }}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">
+            <i class="fas fa-comment"></i>
+            Mensaje:
+          </div>
+          <div class="info-value">{{ order.mensaje }}</div>
+        </div>
+      </div>
+      <div class="order-actions">
+        <button class="btn btn-edit" (click)="openEditModal(order)">
+          <i class="fas fa-edit"></i>
+          Editar
+        </button>
+        <button class="btn btn-delete" (click)="openDeleteModal(order)">
+          <i class="fas fa-trash"></i>
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!hasFilteredOrders()">
+    <i class="fas fa-inbox"></i>
+    <h3>No hay órdenes</h3>
+    <p *ngIf="selectedFilter">No se encontraron órdenes con el estado "{{ selectedFilter }}".</p>
+    <p *ngIf="!selectedFilter">No hay órdenes disponibles en este momento.</p>
+    <button *ngIf="selectedFilter" class="btn btn-edit" (click)="clearFilters()">
+      <i class="fas fa-filter"></i>
+      Limpiar Filtros
+    </button>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal" (click)="onModalOverlayClick($event, 'editModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="fas fa-edit"></i> Editar Orden</h2>
+    </div>
+    <form (ngSubmit)="updateOrder()" #editFormRef="ngForm">
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-hashtag"></i>
+          ID de Orden
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="editForm.id" 
+          name="orderId"
+          readonly>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-chair"></i>
+          Mesa
+        </label>
+        <input 
+          type="number" 
+          class="form-control" 
+          [(ngModel)]="editForm.table" 
+          name="table"
+          min="1" 
+          required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-user"></i>
+          Cliente
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="editForm.client" 
+          name="client"
+          required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-flag"></i>
+          Estado
+        </label>
+        <select 
+          class="form-control" 
+          [(ngModel)]="editForm.status" 
+          name="status"
+          required>
+          <option value="ENVIADO A COCINA">Enviado a Cocina</option>
+          <option value="LISTO PARA DESPACHO">Listo para Despacho</option>
+          <option value="ENTREGADO">Entregado</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fas fa-comment"></i>
+          Mensaje
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="editForm.mensaje" 
+          name="mensaje"
+          required>
+      </div>
+      
+      <div class="modal-actions">
+        <button 
+          type="submit" 
+          class="btn btn-save" 
+          [disabled]="!editFormRef.form.valid">
+          <i class="fas fa-save"></i>
+          Guardar Cambios
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-cancel" 
+          (click)="closeModal('editModal')">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-overlay" id="deleteModal" (click)="onModalOverlayClick($event, 'deleteModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="fas fa-trash-alt"></i> Confirmar Eliminación</h2>
+    </div>
+    <p style="text-align: center; font-size: 1.1rem; color: #2c3e50; margin-bottom: 30px;">
+      ¿Estás seguro de que deseas eliminar la orden de la 
+      <strong>Mesa {{ currentDeletingOrder?.table }}</strong>?
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-delete" (click)="deleteOrder()">
+        <i class="fas fa-trash"></i>
+        Eliminar Orden
+      </button>
+      <button class="btn btn-cancel" (click)="closeModal('deleteModal')">
+        <i class="fas fa-times"></i>
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

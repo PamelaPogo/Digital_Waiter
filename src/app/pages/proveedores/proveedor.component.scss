@@ -1,0 +1,100 @@
+/* Estilos generales para el modal */
+.modal-dialog {
+    max-width: 800px; /* Ancho máximo del modal */
+    margin: 1.75rem auto; /* Margen para centrar el modal en la pantalla */
+  }
+  
+  .modal-content {
+    border-radius: 8px; /* Bordes redondeados para el modal */
+    background-color: #fff; /* Fondo blanco */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  /* Encabezado del modal */
+  .modal-header {
+    border-bottom: 1px solid #e0e0e0; /* Línea de separación entre encabezado y cuerpo */
+    background-color: #f7f7f7; /* Fondo ligeramente gris para el encabezado */
+    padding: 1rem; /* Espaciado interno */
+  }
+  
+  .modal-title {
+    font-size: 1.25rem; /* Tamaño de la fuente del título */
+    font-weight: 600; /* Peso de la fuente para destacar */
+    color: #333; /* Color del texto */
+  }
+  
+  /* Cerrar botón del modal */
+  .btn-close {
+    background: none; /* Quitar el fondo */
+    border: none; /* Sin borde */
+    color: #aaa; /* Color del botón */
+    font-size: 1.2rem; /* Tamaño del icono */
+    cursor: pointer;
+  }
+  
+  .btn-close:hover {
+    color: #333; /* Color del botón al pasar el mouse */
+  }
+  
+  /* Cuerpo del modal */
+  .modal-body {
+    padding: 2rem; /* Espaciado interno */
+    font-size: 1rem; /* Tamaño de texto */
+    color: #555; /* Color de texto */
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem; /* Espaciado entre campos del formulario */
+  }
+  
+  label {
+    font-weight: 500; /* Peso de la fuente del label */
+    color: #666; /* Color del texto del label */
+  }
+  
+  input, textarea {
+    width: 100%; /* Ancho completo */
+    padding: 0.75rem; /* Espaciado interno */
+    margin-top: 0.25rem; /* Espaciado entre el label y el input */
+    border: 1px solid #ddd; /* Borde suave */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño de la fuente del input */
+    background-color: #fafafa; /* Fondo ligeramente gris */
+  }
+  
+  input:focus, textarea:focus {
+    border-color: #007bff; /* Color del borde al hacer foco */
+    outline: none; /* Eliminar el borde predeterminado de foco */
+  }
+  
+  textarea {
+    height: 120px; /* Altura del textarea */
+    resize: vertical; /* Permitir redimensionar solo en dirección vertical */
+  }
+  
+  /* Pie del modal */
+  .modal-footer {
+    border-top: 1px solid #e0e0e0; /* Línea de separación entre el cuerpo y pie */
+    padding: 1rem; /* Espaciado interno */
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d; /* Color de fondo del botón secundario */
+    border: none; /* Sin borde */
+    color: #fff; /* Color del texto */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268; /* Color al pasar el mouse sobre el botón secundario */
+  }
+  
+  .btn-primary {
+    background-color: #007bff; /* Color de fondo del botón primario */
+    border: none; /* Sin borde */
+    color: #fff; /* Color del texto */
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3; /* Color al pasar el mouse sobre el botón primario */
+  }
+  

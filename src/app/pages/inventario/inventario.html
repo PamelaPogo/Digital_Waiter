@@ -1,0 +1,161 @@
+<div id="app" class="app">
+  <!-- BEGIN #content -->
+  <div class="content">
+    <!-- Header personalizado -->
+    <div class="header-section">
+      <div class="header-content">
+        <div class="title-section">
+          <h1><i class="fas fa-utensils"></i> Inventario</h1>
+          <p class="subtitle">Gestiona todo tu inventario</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" (click)="cancelar()">
+            <i class="fas fa-arrow-left"></i> Cancelar
+          </button>
+          <button class="btn btn-primary" (click)="Agregar()">
+            <i class="fas fa-paper-plane"></i> Agregar producto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="card border-0">
+      <ul class="nav nav-tabs nav-tabs-v2 px-3">
+        <li class="nav-item me-2">
+          <a href="#allTab" class="nav-link active px-2" data-bs-toggle="tab">Todo</a>
+        </li>
+        <li class="nav-item me-2">
+          <a href="#publishedTab" class="nav-link px-2" data-bs-toggle="tab">Publicado</a>
+        </li>
+        <li class="nav-item me-2">
+          <a href="#expiredTab" class="nav-link px-2" data-bs-toggle="tab">Caducado</a>
+        </li>
+        <li class="nav-item me-2">
+          <a href="#deletedTab" class="nav-link px-2" data-bs-toggle="tab">Eliminado</a>
+        </li>
+      </ul>
+
+      <div class="tab-content p-3">
+        <div class="table-responsive">
+          <table class="table table-hover text-nowrap">
+            <thead>
+              <tr>
+                <th class="pt-0 pb-2"></th>
+                <th class="pt-0 pb-2">Producto</th>
+                <th class="pt-0 pb-2">Stock</th>
+                <th class="pt-0 pb-2">Clasificación</th>
+                <th class="pt-0 pb-2">Proveedor</th>
+                <th class="pt-0 pb-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of paginatedProducts">
+                <td class="w-10px align-middle">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" [id]="'product' + product.id">
+                    <label class="form-check-label" [for]="'product' + product.id"></label>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="w-50px h-50px bg-light d-flex align-items-center justify-content-center rounded">
+                      <img [src]="product.image" alt="{{ product.name }}" class="mw-100 mh-100 rounded" />
+                    </div>
+                    <div class="ms-3">
+                      <a href="#" class="text-dark text-decoration-none fw-bold">{{ product.name }}</a>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <span class="badge bg-primary">{{ product.inventory }}</span>
+                </td>
+                <td class="align-middle">
+                  <span class="badge bg-secondary">{{ product.type }}</span>
+                </td>
+                <td class="align-middle">{{ product.vendor }}</td>
+                <td class="align-middle">
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm" (click)="editProduct(product)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteProduct(product.id)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="paginatedProducts.length === 0">
+                <td colspan="6" class="text-center py-4">
+                  <div class="empty-state">
+                    <i class="fas fa-box-open text-muted" style="font-size: 3rem;"></i>
+                    <h5 class="mt-3 text-muted">No hay productos disponibles</h5>
+                    <p class="text-muted">Agrega tu primer producto para comenzar</p>
+                    <button class="btn btn-primary" (click)="Agregar()">
+                      <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="d-md-flex align-items-center" *ngIf="totalItems > 0">
+          <div class="me-md-auto text-md-left text-center mb-2 mb-md-0">
+            Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} a {{ Math.min(currentPage * itemsPerPage, totalItems) }} de {{ totalItems }} productos
+          </div>
+          <ul class="pagination mb-0 justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" (click)="onPageChange(currentPage - 1)" style="cursor: pointer;">Anterior</a>
+            </li>
+            <li *ngFor="let page of getPageNumbers()" class="page-item" [class.active]="currentPage === page">
+              <a class="page-link" (click)="onPageChange(page)" style="cursor: pointer;">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" (click)="onPageChange(currentPage + 1)" style="cursor: pointer;">Siguiente</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END #content -->
+
+  <!-- MODAL: Sección del formulario para agregar/editar producto -->
+  <div class="modal-overlay" *ngIf="showAddProductForm">
+    <div class="modal-dialog">
+      <div class="card border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">Agregar Nuevo Producto</h4>
+          <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="cancelAddProduct()"></button>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveProduct()" #productForm="ngForm">
+            <div class="mb-3">
+              <label for="productName" class="form-label">Producto</label>
+              <input type="text" class="form-control" id="productName" [(ngModel)]="newProduct.name" name="productName" required />
+            </div>
+            <div class="mb-3">
+              <label for="productStock" class="form-label">Stock</label>
+              <input type="number" class="form-control" id="productStock" [(ngModel)]="newProduct.inventory" name="productStock" required />
+            </div>
+            <div class="mb-3">
+              <label for="productType" class="form-label">Clasificación</label>
+              <input type="text" class="form-control" id="productType" [(ngModel)]="newProduct.type" name="productType" required />
+            </div>
+            <div class="mb-3">
+              <label for="productVendor" class="form-label">Proveedor</label>
+              <input type="text" class="form-control" id="productVendor" [(ngModel)]="newProduct.vendor" name="productVendor" required />
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-secondary me-2" (click)="cancelAddProduct()">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

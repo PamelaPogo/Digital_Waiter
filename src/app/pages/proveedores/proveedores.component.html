@@ -1,0 +1,124 @@
+<!-- Breadcrumb -->
+<ol class="breadcrumb float-xl-end">
+  <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+  <li class="breadcrumb-item"><a href="javascript:;">Library</a></li>
+  <li class="breadcrumb-item active"><a href="javascript:;">Data</a></li>
+</ol>
+
+<!-- Título -->
+<div class="title">
+  <h1>Gestión de usuarios</h1>
+</div>
+
+<!-- Contenedor principal -->
+<div class="container">
+  <div class="card">
+    <div class="imgPerson">
+      <!-- Imagen para representar "Agregar Nuevo Usuario" -->
+      <div class="card-img-top" style="background-image: url('../../../assets/img/theme/linguini1.png');"></div>
+      <div class="card-body">
+        <h2 class="card-title">Nuevo Usuario</h2>
+        <p class="card-text">Agrega un nuevo usuario aquí</p>
+        <div class="botones">
+          <div class="btn btn-primary" (click)="openModal(null)">Agregar</div> <!-- Botón de agregar -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas de usuarios -->
+  <div class="card" *ngFor="let user of users; let i = index" (mouseenter)="onMouseEnter(i)" (mouseleave)="onMouseLeave(i)">
+    <div class="imgPerson">
+      <div class="card-img-top" id="card-img-{{i}}" [ngStyle]="{'background-image': 'url(' + (user.profileImage || 'assets/default-avatar.png') + ')'}"></div>
+      <div class="card-body">
+        <h2 class="card-title">{{ user.name }}</h2>
+        <p class="card-text">{{ user.Role }}</p>
+        <div class="botones">
+          <div class="btn btn-primary" (click)="openModal(user)">Editar</div>
+          <div class="btn btn-danger" (click)="confirmDelete(user)">Eliminar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true" #addModal #editModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">{{ isEditMode ? 'Editar Usuario' : 'Agregar Nuevo Usuario' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Nombre del usuario -->
+          <div class="form-group">
+            <label for="userName">Nombre</label>
+            <input type="text" id="userName" class="form-control" [(ngModel)]="selectedUser.name" name="name" required>
+            <div *ngIf="!selectedUser.name" class="text-danger">El nombre es obligatorio.</div>
+          </div>
+
+          <!-- Descripción del usuario -->
+          <div class="form-group">
+            <label for="userDescription">Descripción</label>
+            <textarea id="userDescription" class="form-control" [(ngModel)]="selectedUser.description" name="description" required></textarea>
+            <div *ngIf="!selectedUser.description" class="text-danger">La descripción es obligatoria.</div>
+          </div>
+
+          <!-- Rol del usuario -->
+          <div class="form-group">
+            <label for="userRole">Rol</label>
+            <select id="userRole" class="form-control" [(ngModel)]="selectedUser.Role" name="role" required>
+              <option value="">Selecciona un rol</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Cocinero">Cocinero</option>
+              <option value="Camarero">Camarero</option>
+              <option value="Cliente">Cliente</option>
+            </select>
+            <div *ngIf="!selectedUser.Role" class="text-danger">El rol es obligatorio.</div>
+          </div>
+
+          <!-- Imagen de perfil -->
+          <div class="form-group">
+            <label for="profileImage">Imagen de Perfil</label>
+            <input type="file" id="profileImage" class="form-control" (change)="onProfileImageChange($event)" accept="image/*">
+            <div *ngIf="selectedUser.profileImage" class="text-success">Imagen cargada: {{ selectedUser.profileImage.name }}</div>
+          </div>
+
+          <!-- Imagen de hover -->
+          <div class="form-group">
+            <label for="hoverImage">Imagen Hover</label>
+            <input type="file" id="hoverImage" class="form-control" (change)="onHoverImageChange($event)" accept="image/*">
+            <div *ngIf="selectedUser.hoverImage" class="text-success">Imagen cargada: {{ selectedUser.hoverImage.name }}</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="isEditMode ? updateUser() : addUser()">
+          {{ isEditMode ? 'Guardar cambios' : 'Guardar nuevo usuario' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de confirmación para eliminar usuario -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" #deleteModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Eliminar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closeDeleteModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar a <strong>{{ selectedUser.name }}</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDeleteModal()">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
