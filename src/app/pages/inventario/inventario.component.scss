@@ -8,16 +8,23 @@ $box-shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.15);
 $background-color: #ecf0f1;
 $padding: 1.2rem 1.5rem;
 
+$primary-color: #99A854;
+$secondary-color: #cf7d03;
+$text-dark: #2c3e50;
+$text-medium: #34495e;
+$text-light: #7f8c8d;
+
 // Mixin para estilos de recuadro unificados
 @mixin unified-card-style {
   background-color: $background-color;
   border-radius: $border-radius;
   padding: $padding;
   box-shadow: $box-shadow;
-  transition: box-shadow 0.25s ease;
-  
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+
   &:hover {
     box-shadow: $box-shadow-hover;
+    transform: scale(1.015);
   }
 }
 
@@ -26,10 +33,10 @@ $padding: 1.2rem 1.5rem;
   margin: 2rem auto;
   padding: 1.5rem 2rem;
   background: #fff;
-  border-radius: 14px;
+  border-radius: $border-radius;
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #34495e;
+  color: $text-medium;
 }
 
 // 🔝 Header
@@ -50,7 +57,7 @@ $padding: 1.2rem 1.5rem;
   gap: 20px;
 
   .header-content {
-    color: #2c3e50;
+    color: $text-dark;
     font-size: 2.5rem;
     font-weight: 700;
     display: flex;
@@ -63,7 +70,7 @@ $padding: 1.2rem 1.5rem;
 
     .title-section {
       h1 {
-        color: #2c3e50;
+        color: $text-dark;
         font-size: 2.5rem;
         font-weight: 700;
         display: flex;
@@ -88,7 +95,7 @@ $padding: 1.2rem 1.5rem;
       justify-content: flex-start;
 
       .btn {
-        background: linear-gradient(135deg, #cf7d03 0%, #99A854 100%);
+        background: linear-gradient(135deg, $secondary-color 0%, $primary-color 100%);
         color: white;
         border: none;
         padding: 12px 20px;
@@ -142,7 +149,6 @@ $padding: 1.2rem 1.5rem;
     width: 18px;
     height: 18px;
     animation: spin 1s linear infinite;
-    
   }
 }
 
@@ -163,12 +169,12 @@ $padding: 1.2rem 1.5rem;
 
     .product-id {
       font-weight: 600;
-      color: #7f8c8d;
+      color: $text-light;
       font-size: 0.9rem;
     }
 
     .category-badge {
-      background-color: #99A854;
+      background-color: $primary-color;
       color: white;
       font-weight: 700;
       font-size: 0.85rem;
@@ -190,7 +196,7 @@ $padding: 1.2rem 1.5rem;
 
       .info-label {
         font-weight: 700;
-        color: #34495e;
+        color: $text-medium;
         display: flex;
         align-items: center;
         gap: 0.3rem;
@@ -198,7 +204,7 @@ $padding: 1.2rem 1.5rem;
 
       .info-value {
         font-weight: 600;
-        color: #2c3e50;
+        color: $text-dark;
       }
     }
   }
@@ -241,10 +247,16 @@ $padding: 1.2rem 1.5rem;
   }
 }
 
+// Clase para indicar stock bajo
+.low-stock {
+  background-color: rgba(231, 76, 60, 0.15);
+  border-left: 5px solid #c0392b;
+}
+
 .empty-state {
   margin-top: 4rem;
   text-align: center;
-  color: #7f8c8d;
+  color: $text-light;
 
   i {
     font-size: 4rem;
@@ -262,7 +274,7 @@ $padding: 1.2rem 1.5rem;
   }
 
   .btn {
-    background-color: #99A854;
+    background-color: $primary-color;
     color: white;
     border: none;
     border-radius: 20px;
@@ -276,7 +288,7 @@ $padding: 1.2rem 1.5rem;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #99A854;
+      background-color: $primary-color;
     }
   }
 }
@@ -306,18 +318,19 @@ $padding: 1.2rem 1.5rem;
   width: 100%; /* Ocupa todo el ancho disponible hasta el max-width */
   overflow-y: auto; /* Permite scroll si el contenido es largo */
   max-height: 90vh; /* Altura máxima para no desbordar en pantallas pequeñas */
+  animation: fadeIn 0.3s ease-out;
 }
 
 /* Puedes añadir o ajustar estilos de Bootstrap aquí si los necesitas sobrescribir */
 .card-header.bg-primary {
-  background: linear-gradient(135deg, #cf7d03 0%, #99A854 100%); /* Asegura el color primario de Bootstrap */
-  display: flex; /* Añadido para alinear título y botón de cierre */
-  justify-content: space-between; /* Añadido para alinear título y botón de cierre */
-  align-items: center; /* Añadido para alinear título y botón de cierre */
+  background: linear-gradient(135deg, $secondary-color 0%, $primary-color 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .btn-close-white {
-  filter: invert(1) grayscale(100%) brightness(200%); /* Hace la 'X' blanca */
+  filter: invert(1) grayscale(100%) brightness(200%);
   opacity: 0.8;
   &:hover {
     opacity: 1;
@@ -328,7 +341,7 @@ $padding: 1.2rem 1.5rem;
 .modal-dialog {
   .form-group {
     margin-bottom: 1.2rem;
-  
+
     .form-label {
       display: flex;
       align-items: center;
@@ -337,7 +350,7 @@ $padding: 1.2rem 1.5rem;
       margin-bottom: 0.3rem;
       color: #503b2c;
     }
-  
+
     .form-control {
       width: 100%;
       padding: 0.5rem 0.8rem;
@@ -347,19 +360,19 @@ $padding: 1.2rem 1.5rem;
       transition: border-color 0.3s ease;
       font-family: inherit;
       color: #df4b4b;
-  
+
       &:focus {
-        border-color: #99A854;
+        border-color: $primary-color;
         outline: none;
       }
     }
   }
-  
+
   .modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-  
+
     .btn {
       padding: 0.55rem 1.1rem;
       font-weight: 700;
@@ -370,28 +383,25 @@ $padding: 1.2rem 1.5rem;
       align-items: center;
       gap: 0.4rem;
       border: none;
-  
+
       &.btn-save {
-        background-color: #99A854; /* Color Guardar: #99A854 */
+        background-color: $primary-color; /* Color Guardar */
         color: white;
-  
-        // Reemplazado lighten con color.adjust
+
         &:disabled {
-          background-color: color.adjust(#99A854, $lightness: 20%);
+          background-color: color.adjust($primary-color, $lightness: 20%);
           cursor: not-allowed;
         }
-  
-        // Reemplazado darken con color.adjust (con valor negativo)
+
         &:not(:disabled):hover {
-          background-color: color.adjust(#99A854, $lightness: -10%);
+          background-color: color.adjust($primary-color, $lightness: -10%);
         }
       }
-  
+
       &.btn-cancel {
         background-color: #DC3545; /* Color Cancelar: Rojo (Bootstrap danger) */
         color: white;
-  
-        // Reemplazado darken con color.adjust (con valor negativo)
+
         &:hover {
           background-color: color.adjust(#DC3545, $lightness: -10%);
         }
@@ -417,3 +427,21 @@ $padding: 1.2rem 1.5rem;
   }
 }
 
+/* Dark Mode (opcional) */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #2c3e50;
+    color: #ecf0f1;
+  }
+
+  .modal-dialog {
+    background-color: #34495e;
+    color: #ecf0f1;
+  }
+
+  .form-control {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    border-color: #7f8c8d;
+  }
+}

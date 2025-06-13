@@ -124,37 +124,104 @@
   <!-- END #content -->
 
   <!-- MODAL: Sección del formulario para agregar/editar producto -->
-  <div class="modal-overlay" *ngIf="showAddProductForm">
-    <div class="modal-dialog">
-      <div class="card border-0">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h4 class="mb-0">Agregar Nuevo Producto</h4>
-          <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="cancelAddProduct()"></button>
-        </div>
-        <div class="card-body">
-          <form (ngSubmit)="saveProduct()" #productForm="ngForm">
-            <div class="mb-3">
-              <label for="productName" class="form-label">Producto</label>
-              <input type="text" class="form-control" id="productName" [(ngModel)]="newProduct.name" name="productName" required />
-            </div>
-            <div class="mb-3">
-              <label for="productStock" class="form-label">Stock</label>
-              <input type="number" class="form-control" id="productStock" [(ngModel)]="newProduct.inventory" name="productStock" required />
-            </div>
-            <div class="mb-3">
-              <label for="productType" class="form-label">Clasificación</label>
-              <input type="text" class="form-control" id="productType" [(ngModel)]="newProduct.type" name="productType" required />
-            </div>
-            <div class="mb-3">
-              <label for="productVendor" class="form-label">Proveedor</label>
-              <input type="text" class="form-control" id="productVendor" [(ngModel)]="newProduct.vendor" name="productVendor" required />
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" (click)="cancelAddProduct()">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </form>
-        </div>
+ <div
+  class="modal-overlay"
+  *ngIf="showAddProductForm"
+  style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+
+    pointer-events: auto;
+  "
+>
+  <div
+    class="modal-dialog"
+    style="
+      background: white;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 100%;
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+      pointer-events: auto;
+    "
+  >
+    <div class="card border-0">
+      <div
+        class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+        style="border-top-left-radius: 8px; border-top-right-radius: 8px;"
+      >
+        <h4 class="mb-0">{{ editingProduct ? 'Editar Producto' : 'Agregar Nuevo Producto' }}</h4>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          aria-label="Cerrar"
+          (click)="cancelAddProduct()"
+          style="cursor: pointer;"
+        ></button>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="saveProduct(productForm)" #productForm="ngForm" autocomplete="off">
+          <div class="mb-3">
+            <label for="productName" class="form-label">Producto</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productName"
+              [(ngModel)]="newProduct.name"
+              name="productName"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="productStock" class="form-label">Stock</label>
+            <input
+              type="number"
+              class="form-control"
+              id="productStock"
+              [(ngModel)]="newProduct.inventory"
+              name="productStock"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="productType" class="form-label">Clasificación</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productType"
+              [(ngModel)]="newProduct.type"
+              name="productType"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="productVendor" class="form-label">Proveedor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productVendor"
+              [(ngModel)]="newProduct.vendor"
+              name="productVendor"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="cancelAddProduct()">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">Guardar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
